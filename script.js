@@ -1,4 +1,130 @@
-document.addEventListener('DOMContentLoaded', () => {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Expense Tracker</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .modal-content {
+        width: 80%;
+        padding: 20px;
+    }
+    .open-modal-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        padding: 0;
+    }
+
+    .open-modal-btn i{
+        font-style: normal;
+    }
+    #total_price {
+        font-size: 24px;
+    }
+
+    form input {
+        width: 90%;
+        font-size: 16px;
+    }
+
+   .add-btn {
+        width: 30%;
+        font-size: 16px;
+    }
+    .cancel-btn{
+        font-size: 16px;
+        padding-left: 15px;
+    }
+
+    
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 80%;
+        padding: 20px;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    #success-modal {
+        width: 80%;
+        padding: 15px;
+    }
+
+    #total_price {
+        font-size: 20px;
+    }
+
+    .add-btn, .cancel-btn {
+        font-size: 14px;
+    }
+
+    .open-modal-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        padding: 0;
+    }
+    .display-section h2{
+        font-size: 25px;
+    }
+}
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="display-section">
+                <h2>Expenses this month:</h2>
+                <p id="total_price">$0</p>
+                <p class="exp-list">Expenses: </p>
+                <ul id="expense-list"></ul>
+            </div>
+            
+            <button id="open-modal" class="open-modal-btn"><i class="fa-thin fa-plus"></i></button>
+
+            <div id="expense-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Add Expense</h3>
+                    <span class="close"><i class="fa-solid fa-xmark"></i></span>
+                    <form id="expense-form">
+                        <label for="things">Item</label>
+                        <input type="text" id="things" name="things" required placeholder="Item name">
+                        <label for="price">Price</label>
+                        <input type="number" id="price" name="price" required placeholder="Price">
+                        <button type="submit" class="add-btn">Add</button>
+                        <span class="cancel-btn">Cancel</span>
+                    </form>
+                    <div id="form-message" class="form-message"></div>
+                </div>
+            </div>
+
+            
+            <div id="success-modal">
+                <div id="success-modal-header">
+                    <span id="status-header">Status</span>
+                    <button id="success-close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="success-message">Item inserted successfully!</div>
+            </div>
+
+        </div>
+
+        <script>
+
+            document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('expense-form');
     const expenseList = document.getElementById('expense-list');
     const totalPriceElement = document.getElementById('total_price');
@@ -13,6 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const successMessage = document.getElementById('success-message');
     const successCloseBtn = document.getElementById('success-close');
 
+
+    
     function showModalMessage(message, isSuccess) {
         formMessage.textContent = message;
         formMessage.style.color = isSuccess ? 'green' : 'red';
@@ -27,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         try {
-            const response = await fetch('http://localhost/expenses/api/v1/data', {
+            const response = await fetch('https://practice.mchaexpress.com/expenses/api/v1/data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -76,9 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
         successModal.style.display = 'none';
     });
 
+
     async function fetchExpenses() {
         try {
-            const response = await fetch('http://localhost/expenses/api/v1/data'); 
+            const response = await fetch('https://practice.mchaexpress.com/expenses/api/v1/data'); 
             const data = await response.json();
             
             if (data.status === 'success') {
@@ -109,8 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', async () => {
                 const expenseId = button.getAttribute('data-expense-id');
                 try {
-                    const deleteResponse = await fetch(`http://localhost/expenses/api/v1/data?id=${expenseId}`, {
-                        method: 'DELETE'
+                    const deleteResponse = await fetch(`https://practice.mchaexpress.com/expenses/api/v1/data?id=${expenseId}`, {
+                        method: 'DELETE',
+                        credentials: 'include' // Ensure cookies or credentials are sent if needed
                     });
 
                     if (deleteResponse.ok) {
@@ -126,5 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     fetchExpenses();
 });
+
+        </script>
+    
+    </body>
+    </html>
